@@ -20,6 +20,7 @@ const messageDescriptionNullElement = document.getElementById("messageDescriptio
 
 const selectMaterialElement = document.getElementById("selectMaterial");
 const messageMaterialNotFoundElement = document.getElementById("messageMaterialNotFound");
+const messageNotSelectMaterialElement = document.getElementById("messageNotSelectMaterial");
 
 const messageNotDataIsMaterialListElement = document.getElementById("messageNotDataIsMaterialList");
 const messageNotDataIsFoodListElement = document.getElementById("messageNotDataIsFoodList");
@@ -195,10 +196,22 @@ function removeMessageDescription() {
 // 
 // Material
 function validateMaterial() {
-    let optionValue = document.getElementById("materialSelect").value
-    if (optionValue == "Not Found") {
+    let checkedValue = []; 
+    let checkboxElements = document.getElementsByClassName('checkboxMaterial');
+    for (let index = 0; index < checkboxElements.length; index++) {
+        if(checkboxElements[index].checked){
+            checkedValue.push(checkboxElements[index].value);
+        }
+    }
+    if (document.getElementById("materialSelect") == null) {
+        messageMaterialNotFoundElement.classList.add("text-danger")
         buttonAddFoodElement.disabled = true;
-        messageMaterialNotFoundElement.classList.remove("d-none");
+        return false;
+    }
+    if (checkedValue.length == 0) {
+        console.log("process");
+        messageNotSelectMaterialElement.classList.remove("d-none")
+        buttonAddFoodElement.disabled = true;
         return false;
     }
     return true;
@@ -206,33 +219,44 @@ function validateMaterial() {
 
 function removeMessageMaterial() {
     buttonAddFoodElement.disabled = false;
-    messageMaterialNotFoundElement.classList.add("d-none")
+    messageNotSelectMaterialElement.classList.add("d-none")
 }
 
 //
 function genSelectMaterial() {
-    let option = document.createElement("option");
     if (listMaterial.length == 0) {
-        option.text = "Not Found";
-        option.value = "Not Found";
-        document.getElementById("materialSelect").add(option);   
+        if (document.getElementById("materialSelect") != null) {
+            document.getElementById("materialSelect").remove();
+        }
+        messageMaterialNotFoundElement.classList.remove("d-none")
     } else{
+        messageMaterialNotFoundElement.classList.add("d-none")
         genOptionMaterial();
     }
 };
 
 function genOptionMaterial(){
-    let select = document.getElementById("materialSelect");
-    let length = select.options.length;
-    for (i = length-1; i >= 0; i--) {
-        select.options[i] = null;
+    if (document.getElementById("materialSelect") != null) {
+        document.getElementById("materialSelect").remove();
     }
+
+    let div = document.createElement("div");
+    div.setAttribute("id", "materialSelect");
+    document.getElementById("selectMaterial").appendChild(div); 
+
     for (let index = 0; index < listMaterial.length; index++) {
         const element = listMaterial[index];
-        let option = document.createElement("option");
-        option.text = element.materialName;
-        option.value = element.materialName;
-        document.getElementById("materialSelect").add(option); 
+        let checkbox = document.createElement("input");
+        checkbox.setAttribute("value", element.materialName);
+        checkbox.setAttribute("name", element.materialName);
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("class", "ms-3 checkboxMaterial");
+
+        let label = document.createElement("label");
+        label.innerText = element.materialName;
+        label.setAttribute("class", "ms-1");
+        document.getElementById("materialSelect").appendChild(checkbox); 
+        document.getElementById("materialSelect").appendChild(label); 
     }
 }
 
@@ -407,16 +431,23 @@ function addFood() {
         return false;
     }
 
+    let checkedValue = []; 
+    let checkboxElements = document.getElementsByClassName('checkboxMaterial');
+    for (let index = 0; index < checkboxElements.length; index++) {
+        if(checkboxElements[index].checked){
+            checkedValue.push(checkboxElements[index].value);
+        }
+    }
+
     let foodElement = {
         foodName: foodNameInputElement.value,
         price: priceInputElement.value,
         description: descriptionInputElement.value,
-        material: document.getElementById("materialSelect").value
+        material: checkedValue
     }
 
     listFood.push(foodElement);
 
-    
     foodNameInputElement.value = null;
     priceInputElement.value = null;
     descriptionInputElement.value = null;
