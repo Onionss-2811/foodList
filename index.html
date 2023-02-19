@@ -1,52 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Menu</title>
 </head>
+
 <body>
     <div class="height-100vh width-100 bg-secondary bg-gradient d-flex">
-        <div class="height-100vh width-70 d-flex justify-content-center align-items-center">
-            <div class="height-85vh width-90 bg-white rounded-2">
+        <div class="width-70 d-flex justify-content-center align-items-start pt-5">
+            <div class="width-90 bg-white rounded-2">
                 <div class="d-flex justify-content-between align-items-center border-bottom">
                     <div class="mt-3 ms-3">
-                        <h4 class="fw-bold">FOOD LIST</h4>
+                        <h4 class="fw-bold">DISH LIST</h4>
                     </div>
                     <div class="mt-3 me-3 mb-3">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAddFood">Add Food</button>
+                        <button type="button" id="btnOpenModalAddFood" class="btn btn-primary" data-toggle="modal" data-target="#ModalAddFood">Add Dish</button>
                     </div>
                 </div>
-                <table class="table table-striped mt-3">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Food name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Material</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
-                  
+                <div id="foodContent">
+                    <div id="foodTable" class="ms-3 me-3 mt-3 pb-3">
+                        <p id="messageNotDataIsFoodList" class="fw-bold text-center mt-5 mb-5 d-none">Not data is Dish List</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="height-100vh width-30 d-flex justify-content-center align-items-center">
-            <div class="height-85vh width-90 bg-white rounded-2">
+        <div class="height-100vh width-30 d-flex justify-content-center align-items-start pt-5">
+            <div class="width-90 bg-white rounded-2">
                 <div class="d-flex justify-content-between align-items-center border-bottom">
                     <div class="mt-3 ms-3">
                         <h4 class="fw-bold">MATERIAL LIST</h4>
@@ -55,93 +42,100 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAddMaterial">Add Material</button>
                     </div>
                 </div>
+                <div id="materialContent">
+                    <div id="materialTable" class="ms-3 me-3 mt-3 pb-3">
+                        <p id="messageNotDataIsMaterialList" class="fw-bold text-center mt-5 mb-5 d-none">Not data is Material List</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-<!-- Modal Add Material -->
-      <div class="modal fade" id="ModalAddMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <!-- Modal Add Material -->
+    <div class="modal fade" id="ModalAddMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Add Material</h5>
-              <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Material</h5>
+                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-            </div>
-            <div class="modal-body">
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Material name: </label>
-                    <input type="text" class="form-control" id="materialName">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messageMaterialNameNull">Material name is not null</div>
                 </div>
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Quantity: </label>
-                    <input type="number" class="form-control" id="quantity">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messageQuantityNull">Quantity is not null</div>
-                </div>
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Unit: </label>
-                    <input type="text" class="form-control" id="unit">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messageUnitNull">Unit is not null</div>
-                </div>
+                <div class="modal-body">
 
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Material name: </label>
+                        <input type="text" class="form-control" id="materialName">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageMaterialNameNull">Material name is not null</div>
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageMaterialNameAlreadyDefine">Material name is already define</div>
+                    </div>
+
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Quantity: </label>
+                        <input type="number" class="form-control" id="quantity">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageQuantityNull">Quantity is not null</div>
+                    </div>
+
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Unit: </label>
+                        <input type="text" class="form-control" id="unit">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageUnitNull">Unit is not null</div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAddMaterial" class="btn btn-success">Add</button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success">Add</button>
-            </div>
-          </div>
         </div>
-      </div>
-<!-- Modal Add Food -->
+    </div>
+    <!-- Modal Add Food -->
     <div class="modal fade" id="ModalAddFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Food</h5>
-            <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Dish</h5>
+                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            </div>
-            <div class="modal-body">
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Food name: </label>
-                    <input type="text" class="form-control" id="foodName">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messageFoodNameNull">Food name is not null</div>
                 </div>
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Price: </label>
-                    <input type="text" class="form-control" id="price">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messagePriceNull">Price is not null</div>
-                </div>
-                
-                <div >
-                    <label for="nameInput" class="form-label fw-bold">Description: </label>
-                    <input type="text" class="form-control" id="description">
-                    <div class="text-danger mt-1 ms-1 d-none" id="messageDescriptionNull">Description is not null</div>
-                </div>
+                <div class="modal-body">
 
-                <div class="mt-3">
-                    <label for="nameInput" class="form-label fw-bold">Material: </label>
-                    <!-- <input type="text" class="form-control" id="material"> -->
-                    <select class="ms-4" name="material" id="material">
-                        <option value="notFound">Not Found</option>
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Dish name: </label>
+                        <input type="text" class="form-control" id="foodName">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageFoodNameNull">Dish name is not null</div>
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageFoodNameAlreadyDefine">Dish name is already define</div>
+                    </div>
+
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Price: </label>
+                        <input type="number" class="form-control" id="price">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messagePriceNull">Price is not null</div>
+                    </div>
+
+                    <div>
+                        <label for="nameInput" class="form-label fw-bold">Description: </label>
+                        <input type="text" class="form-control" id="description">
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageDescriptionNull">Description is not null</div>
+                    </div>
+
+                    <div id="selectMaterial" class="mt-3">
+                        <label for="nameInput" class="form-label fw-bold">Material: </label>
+                        <select name="materialSelect" id="materialSelect" class="ms-3 mt-1"></select>
+                        <div class="text-danger mt-1 ms-1 d-none" id="messageMaterialNotFound">Material is not define</div>
                     </select>
-                </div>
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAddFood" class="btn btn-success">Add</button>
+                </div>
             </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-success">Add</button>
-            </div>
-        </div>
         </div>
     </div>
 
     <script src="./index.js"></script>
 </body>
+
 </html>
