@@ -1,98 +1,62 @@
-const materialNameInputElement = document.getElementById("materialName");
-const messageMaterialNameNullElement = document.getElementById("messageMaterialNameNull");
-const messageMaterialNameAlreadyDefineElement = document.getElementById("messageMaterialNameAlreadyDefine");
-
 const foodNameInputElement = document.getElementById("foodName");
 const messageFoodNameNullElement = document.getElementById("messageFoodNameNull");
 const messageFoodNameAlreadyDefineElement = document.getElementById("messageFoodNameAlreadyDefine");
 
-const quantityInputElement = document.getElementById("quantity");
-const messageQuantityInputNullElement = document.getElementById("messageQuantityNull");
-
 const priceInputElement = document.getElementById("price");
 const messagePriceNullElement = document.getElementById("messagePriceNull");
-
-const unitInputElement = document.getElementById("unit");
-const messageUnitNullElement = document.getElementById("messageUnitNull");
 
 const descriptionInputElement = document.getElementById("description");
 const messageDescriptionNullElement = document.getElementById("messageDescriptionNull");
 
-const selectMaterialElement = document.getElementById("selectMaterial");
-const messageMaterialNotFoundElement = document.getElementById("messageMaterialNotFound");
-const messageNotSelectMaterialElement = document.getElementById("messageNotSelectMaterial");
+const fromMaterialElement = document.getElementById("selectMaterial");
+const messageNotAddMaterialElement = document.getElementById("messageNotAddMaterial");
+const messageNameMaterialNullElement = document.getElementById("messageNameMaterialNull");
+const messageQuantityMaterialNullElement = document.getElementById("messageQuantityMaterialNull");
+const messageUnitMaterialNullElement = document.getElementById("messageUnitMaterialNull");
 
-const messageNotDataIsMaterialListElement = document.getElementById("messageNotDataIsMaterialList");
 const messageNotDataIsFoodListElement = document.getElementById("messageNotDataIsFoodList");
 
-const buttonAddMaterialElement = document.getElementById("btnAddMaterial");
 const buttonAddFoodElement = document.getElementById("btnAddFood");
-const buttonOpenModalAddFoodElement = document.getElementById("btnOpenModalAddFood");
+const buttonAddMaterialElement = document.getElementById("btnAddMaterial");
 
 const regexName = /[^ a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]/g;
 const regexDescription = /[^ a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]/g;
 
-let listFood = [];
-let listMaterial = [];
-let thTableFood = ["Name", "Price", "Description", "Material", "Action"];
-let thTableMaterial = ["Name", "Quanlity", "Unit", "Action"];
+let listFood = [{
+    foodName: "Trứng rán",
+    price: "120",
+    description: "Nhiều hành mới ngon",
+    material: [{
+            materialName: "Trứng",
+            materialQuantity: "2",
+            materialUnit: "quả"
+        },
+        {
+            materialName: "Hành lá",
+            materialQuantity: "5",
+            materialUnit: "cây"
+        }
+    ]
+}];
 
-materialNameInputElement.addEventListener("blur", validateMaterialName);
-materialNameInputElement.addEventListener("input", removeMessageMaterialName);
+let listMaterial = [];
+let count = 0;
+let thTableFood = ["Name", "Price", "Description", "Material", "Action"];
 
 foodNameInputElement.addEventListener("blur", validateFoodName);
 foodNameInputElement.addEventListener("input", removeMessageFoodName);
 
-quantityInputElement.addEventListener("blur", validateQuanlity);
-quantityInputElement.addEventListener("input", removeMessageQuanlity);
-
 priceInputElement.addEventListener("blur", validatePrice);
 priceInputElement.addEventListener("input", removeMessagePrice);
-
-unitInputElement.addEventListener("blur", validateUnit);
-unitInputElement.addEventListener("input", removeMessageUnit);
 
 descriptionInputElement.addEventListener("blur", validateDescription);
 descriptionInputElement.addEventListener("input", removeMessageDescription);
 
-selectMaterialElement.addEventListener("click", removeMessageMaterial)
-
-buttonAddMaterialElement.addEventListener("click", addMaterial);
 buttonAddFoodElement.addEventListener("click", addFood);
-buttonOpenModalAddFoodElement.addEventListener("click", genSelectMaterial);
+buttonAddMaterialElement.addEventListener("click", addMaterial);
 
-processGenTableMaterial();
 processGenTableFood();
 
-// Material Name
-function validateMaterialName() {
-    if (materialNameInputElement.value.trim() == "") {
-        buttonAddMaterialElement.disabled = true;
-         messageMaterialNameAlreadyDefineElement.classList.add("d-none");
-        messageMaterialNameNullElement.classList.remove("d-none")
-        materialNameInputElement.value = null;
-        materialNameInputElement.focus();
-        return false;
-    }
-    for (let index = 0; index < listMaterial.length; index++) {
-        const element = listMaterial[index];
-        if (materialNameInputElement.value == element.materialName) {
-            buttonAddMaterialElement.disabled = true;
-            messageMaterialNameAlreadyDefineElement.classList.remove("d-none")
-            materialNameInputElement.value = null;
-            materialNameInputElement.focus();
-            return false;
-        }
-    }
-    return true;
-}
-
-function removeMessageMaterialName() {
-    materialNameInputElement.value = materialNameInputElement.value.replace(regexName, "");
-    buttonAddMaterialElement.disabled = false;
-    messageMaterialNameNullElement.classList.add("d-none");
-    messageMaterialNameAlreadyDefineElement.classList.add("d-none");
-}
 
 // Food Name
 function validateFoodName() {
@@ -124,23 +88,6 @@ function removeMessageFoodName() {
     messageFoodNameAlreadyDefineElement.classList.add("d-none");
 }
 
-// Quantity
-function validateQuanlity() {
-    if (quantityInputElement.value.trim() == "") {
-        buttonAddMaterialElement.disabled = true;
-        messageQuantityInputNullElement.classList.remove("d-none")
-        quantityInputElement.value = null;
-        quantityInputElement.focus();
-        return false;
-    }
-    return true;
-}
-
-function removeMessageQuanlity() {
-    buttonAddMaterialElement.disabled = false;
-    messageQuantityInputNullElement.classList.add("d-none")
-}
-
 // Price
 function validatePrice() {
     if (priceInputElement.value.trim() == "") {
@@ -156,24 +103,6 @@ function validatePrice() {
 function removeMessagePrice() {
     buttonAddFoodElement.disabled = false;
     messagePriceNullElement.classList.add("d-none")
-}
-
-// Unit
-function validateUnit() {
-    if (unitInputElement.value.trim() == "") {
-        buttonAddMaterialElement.disabled = true;
-        messageUnitNullElement.classList.remove("d-none")
-        unitInputElement.value = null;
-        unitInputElement.focus();
-        return false;
-    }
-    return true;
-}
-
-function removeMessageUnit() {
-    unitInputElement.value = unitInputElement.value.replace(regexName, "");
-    buttonAddMaterialElement.disabled = false;
-    messageUnitNullElement.classList.add("d-none")
 }
 
 // Description
@@ -193,135 +122,116 @@ function removeMessageDescription() {
     buttonAddFoodElement.disabled = false;
     messageDescriptionNullElement.classList.add("d-none")
 }
-// 
-// Material
+
 function validateMaterial() {
-    let checkedValue = []; 
-    let checkboxElements = document.getElementsByClassName('checkboxMaterial');
-    for (let index = 0; index < checkboxElements.length; index++) {
-        if(checkboxElements[index].checked){
-            checkedValue.push(checkboxElements[index].value);
+    let listMaterialNameElement = document.querySelectorAll("#materialName");
+    let listMaterialQuantityElement = document.querySelectorAll("#materialQuantity")
+    let listMaterialUnitNameElement = document.querySelectorAll("#materialUnit");
+
+    messageNameMaterialNullElement.classList.add("d-none");
+    messageQuantityMaterialNullElement.classList.add("d-none");
+    messageUnitMaterialNullElement.classList.add("d-none");
+
+    if (listMaterialNameElement.length == 0) {
+        messageNotAddMaterialElement.classList.remove("d-none");
+        buttonAddFoodElement.disabled = true;
+        return false;
+    }
+    for (let index = 0; index < listMaterialNameElement.length; index++) {
+        listMaterialNameElement[index].addEventListener("input", messageMaterial);
+        if (listMaterialNameElement[index].value == "") {
+            messageNameMaterialNullElement.classList.remove("d-none");
+            listMaterialNameElement[index].focus();
+            buttonAddFoodElement.disabled = true;
+            return false;
         }
     }
-    if (document.getElementById("materialSelect") == null) {
-        messageMaterialNotFoundElement.classList.add("text-danger")
-        buttonAddFoodElement.disabled = true;
-        return false;
+    for (let index = 0; index < listMaterialQuantityElement.length; index++) {
+        listMaterialQuantityElement[index].addEventListener("input", messageMaterial);
+        if (listMaterialQuantityElement[index].value == "") {
+            messageQuantityMaterialNullElement.classList.remove("d-none");
+            listMaterialQuantityElement[index].focus();
+            buttonAddFoodElement.disabled = true;
+            return false;
+        }
     }
-    if (checkedValue.length == 0) {
-        console.log("process");
-        messageNotSelectMaterialElement.classList.remove("d-none")
-        buttonAddFoodElement.disabled = true;
-        return false;
+    for (let index = 0; index < listMaterialUnitNameElement.length; index++) {
+        listMaterialUnitNameElement[index].addEventListener("input", messageMaterial);
+        if (listMaterialUnitNameElement[index].value == "") {
+            messageUnitMaterialNullElement.classList.remove("d-none");
+            listMaterialUnitNameElement[index].focus();
+            buttonAddFoodElement.disabled = true;
+            return false;
+        }
     }
     return true;
 }
 
-function removeMessageMaterial() {
+function messageMaterial(){
+    messageNameMaterialNullElement.classList.add("d-none");
+    messageQuantityMaterialNullElement.classList.add("d-none");
+    messageUnitMaterialNullElement.classList.add("d-none");
     buttonAddFoodElement.disabled = false;
-    messageNotSelectMaterialElement.classList.add("d-none")
 }
 
-//
-function genSelectMaterial() {
-    if (listMaterial.length == 0) {
-        if (document.getElementById("materialSelect") != null) {
-            document.getElementById("materialSelect").remove();
-        }
-        messageMaterialNotFoundElement.classList.remove("d-none")
-    } else{
-        messageMaterialNotFoundElement.classList.add("d-none")
-        genOptionMaterial();
-    }
-};
 
-function genOptionMaterial(){
-    if (document.getElementById("materialSelect") != null) {
-        document.getElementById("materialSelect").remove();
-    }
+function addMaterial() {
+
+    messageNotAddMaterialElement.classList.add("d-none");
+    buttonAddFoodElement.disabled = false;
+
+    count = count + 1;
+
+    let divFromMaterial =document.createElement("div");
+    divFromMaterial.setAttribute("id", "fromMaterial");
+    fromMaterialElement.appendChild(divFromMaterial);
 
     let div = document.createElement("div");
-    div.setAttribute("id", "materialSelect");
-    document.getElementById("selectMaterial").appendChild(div); 
+    div.setAttribute("id", "fromMaterial" + count);
+    div.setAttribute("class", "d-flex mt-3");
+    divFromMaterial.appendChild(div);
 
-    for (let index = 0; index < listMaterial.length; index++) {
-        const element = listMaterial[index];
-        let checkbox = document.createElement("input");
-        checkbox.setAttribute("value", element.materialName);
-        checkbox.setAttribute("name", element.materialName);
-        checkbox.setAttribute("type", "checkbox");
-        checkbox.setAttribute("class", "ms-3 checkboxMaterial");
+    let inputName = document.createElement("input");
+    inputName.setAttribute("type", "text");
+    inputName.setAttribute("class", "form-control me-1");
+    inputName.setAttribute("id", "materialName");
+    inputName.setAttribute("placeholder", "Name");
+    div.appendChild(inputName);
 
-        let label = document.createElement("label");
-        label.innerText = element.materialName;
-        label.setAttribute("class", "ms-1");
-        document.getElementById("materialSelect").appendChild(checkbox); 
-        document.getElementById("materialSelect").appendChild(label); 
-    }
+    let inputQuantity = document.createElement("input");
+    inputQuantity.setAttribute("type", "number");
+    inputQuantity.setAttribute("class", "form-control me-1");
+    inputQuantity.setAttribute("id", "materialQuantity");
+    inputQuantity.setAttribute("placeholder", "Quantity");
+    div.appendChild(inputQuantity);
+
+    let inputUnit = document.createElement("input");
+    inputUnit.setAttribute("type", "text");
+    inputUnit.setAttribute("class", "form-control me-1");
+    inputUnit.setAttribute("id", "materialUnit");
+    inputUnit.setAttribute("placeholder", "Unit");
+    div.appendChild(inputUnit);
+
+    let btnX = document.createElement("button");
+    btnX.setAttribute("type", "button");
+    btnX.setAttribute("class", "btn btn-sm btn-danger m-1");
+    btnX.setAttribute("onclick", "deleteMaterial(fromMaterial" + count + ")");
+    btnX.innerText = "x"
+    div.appendChild(btnX);
 }
 
-// 
-function processGenTableMaterial() {
-    if (listMaterial.length == 0) {
-        if (document.getElementById("tblMaterial") != null) {
-            document.getElementById("tblMaterial").remove();
-        }
-        messageNotDataIsMaterialListElement.classList.remove("d-none");
-    }
-    else{
-        messageNotDataIsMaterialListElement.classList.add("d-none");
-        genTableMaterial();
-    }
+function deleteMaterial(idFormMaterial) {
+    idFormMaterial.remove();
+    buttonAddFoodElement.disabled = false;
+    messageNameMaterialNullElement.classList.add("d-none");
+    messageQuantityMaterialNullElement.classList.add("d-none");
+    messageUnitMaterialNullElement.classList.add("d-none");
 }
 
-function genTableMaterial() {
-
-    if (document.getElementById("tblMaterial") != null) {
-        document.getElementById("tblMaterial").remove();
-    }
-
-    let tbl = document.createElement("table");
-    tbl.setAttribute("class", "table table-striped table-hover");
-    tbl.setAttribute("id", "tblMaterial");
-    document.getElementById("materialTable").appendChild(tbl);
-
-    let thead = tbl.createTHead();
-    let tbody = tbl.createTBody();
-    let rowHead = thead.insertRow();
-    for (let key of thTableMaterial) {
-        let th = document.createElement("th");
-        let text = document.createTextNode(key);
-        th.appendChild(text);
-        rowHead.appendChild(th);
-      }
-
-      for (let element of listMaterial) {
-        let rowBody = tbody.insertRow();
-        for (key in element) {
-          let cell = rowBody.insertCell();
-          cell.setAttribute("class", "text-center");
-          let text = document.createTextNode(element[key]);
-          cell.appendChild(text);
-        }
-        let cellAction = rowBody.insertCell();
-        let btnDeleteMaterial = document.createElement("button");
-        btnDeleteMaterial.innerText = "Delete";
-        btnDeleteMaterial.setAttribute("class", "btn btn-danger btn-sm");
-        btnDeleteMaterial.setAttribute("onclick","deleteElementMaterial('"+element.materialName+"')");
-        cellAction.appendChild(btnDeleteMaterial);
-      }
-}
-
-function deleteElementMaterial(name) {
-    if (confirm("Are you sure you want to delete this material?") == true) {
-        for (let index = 0; index < listMaterial.length; index++) {
-            const element = listMaterial[index].materialName;
-            if (name == element) {
-                listMaterial.splice(index, 1);
-                processGenTableMaterial();
-                genSelectMaterial();
-            }
-        }
+function deleteAllMaterial() {
+    let listFromMaterial = document.querySelectorAll("#fromMaterial");
+    for (let index = 0; index < listFromMaterial.length; index++) {
+        listFromMaterial[index].remove();
     }
 }
 
@@ -332,8 +242,7 @@ function processGenTableFood() {
             document.getElementById("tblFood").remove();
         }
         messageNotDataIsFoodListElement.classList.remove("d-none");
-    }
-    else{
+    } else {
         messageNotDataIsFoodListElement.classList.add("d-none");
         genTableFood();
     }
@@ -358,22 +267,32 @@ function genTableFood() {
         let text = document.createTextNode(key);
         th.appendChild(text);
         rowHead.appendChild(th);
-      }
+    }
 
-      for (let element of listFood) {
+    for (let element of listFood) {
         let rowBody = tbody.insertRow();
         for (key in element) {
-          let cell = rowBody.insertCell();
-          let text = document.createTextNode(element[key]);
-          cell.appendChild(text);
+            if (key == "material") {
+                let cell = rowBody.insertCell();
+                for (key in element.material) {
+                    let div = document.createElement("div");
+                    let text = document.createTextNode(element.material[key].materialName + ": " + element.material[key].materialQuantity + " " + element.material[key].materialUnit);
+                    div.appendChild(text);
+                    cell.appendChild(div);
+                }
+            } else {
+                let cell = rowBody.insertCell();
+                let text = document.createTextNode(element[key]);
+                cell.appendChild(text);
+            }
         }
         let cellAction = rowBody.insertCell();
         let btnDeleteFood = document.createElement("button");
         btnDeleteFood.innerText = "Delete";
         btnDeleteFood.setAttribute("class", "btn btn-danger btn-sm");
-        btnDeleteFood.setAttribute("onclick","deleteElementFood('"+element.foodName+"')");
+        btnDeleteFood.setAttribute("onclick", "deleteElementFood('" + element.foodName + "')");
         cellAction.appendChild(btnDeleteFood);
-      }
+    }
 }
 
 function deleteElementFood(name) {
@@ -390,34 +309,8 @@ function deleteElementFood(name) {
 }
 
 // 
-function addMaterial() {
-    if (!validateMaterialName()) {
-        return false;
-    }
-    if (!validateQuanlity()) {
-        return false;
-    }
-    if (!validateUnit()) {
-        return false;
-    }
-
-    let materialElement = {
-        materialName: materialNameInputElement.value,
-        quantity: quantityInputElement.value,
-        unit: unitInputElement.value,
-    }
-
-    listMaterial.push(materialElement);
-
-    materialNameInputElement.value = null;
-    quantityInputElement.value = null;
-    unitInputElement.value = null;
-    processGenTableMaterial();
-    $('#ModalAddMaterial').modal('toggle');
-}
-
-// 
 function addFood() {
+    let listMaterial = []
     if (!validateFoodName()) {
         return false;
     }
@@ -431,19 +324,19 @@ function addFood() {
         return false;
     }
 
-    let checkedValue = []; 
-    let checkboxElements = document.getElementsByClassName('checkboxMaterial');
-    for (let index = 0; index < checkboxElements.length; index++) {
-        if(checkboxElements[index].checked){
-            checkedValue.push(checkboxElements[index].value);
-        }
+    let materialName = document.querySelectorAll("#materialName");
+    let materialQuantity = document.querySelectorAll("#materialQuantity");
+    let materialUnit = document.querySelectorAll("#materialUnit");
+
+    for (let index = 0; index < materialName.length; index++) {
+        listMaterial.push({ "materialName": materialName[index].value, "materialQuantity": materialQuantity[index].value, "materialUnit": materialUnit[index].value })
     }
 
     let foodElement = {
         foodName: foodNameInputElement.value,
         price: priceInputElement.value,
         description: descriptionInputElement.value,
-        material: checkedValue
+        material: listMaterial
     }
 
     listFood.push(foodElement);
@@ -451,7 +344,8 @@ function addFood() {
     foodNameInputElement.value = null;
     priceInputElement.value = null;
     descriptionInputElement.value = null;
+    deleteAllMaterial();
+
     processGenTableFood();
     $('#ModalAddFood').modal('toggle');
 }
-
