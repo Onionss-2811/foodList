@@ -14,6 +14,10 @@ const messageNameMaterialNullElement = document.getElementById("messageNameMater
 const messageQuantityMaterialNullElement = document.getElementById("messageQuantityMaterialNull");
 const messageUnitMaterialNullElement = document.getElementById("messageUnitMaterialNull");
 
+let nameMaterialElement;
+let quantityMaterialElement;
+let unitMaterialElement;
+
 const messageNotDataIsFoodListElement = document.getElementById("messageNotDataIsFoodList");
 
 const buttonAddFoodElement = document.getElementById("btnAddFood");
@@ -54,6 +58,27 @@ descriptionInputElement.addEventListener("input", removeMessageDescription);
 
 buttonAddFoodElement.addEventListener("click", addFood);
 buttonAddMaterialElement.addEventListener("click", addMaterial);
+
+function materialInputAddEventListener() {
+    nameMaterialElement = document.querySelectorAll("#materialName");
+    quantityMaterialElement = document.querySelectorAll("#materialQuantity");
+    unitMaterialElement = document.querySelectorAll("#materialUnit");
+
+    for (let index = 0; index < nameMaterialElement.length; index++) {
+        nameMaterialElement[index].addEventListener("blur", function() { validateNameMaterial(index) });
+        nameMaterialElement[index].addEventListener("input", function() { removeMessageNameMaterial(index) });
+    }
+
+    for (let index = 0; index < quantityMaterialElement.length; index++) {
+        quantityMaterialElement[index].addEventListener("blur", function() { validateQuantityMaterial(index) });
+        quantityMaterialElement[index].addEventListener("input", function() { removeMessageQuantityMaterial(index) });
+    }
+
+    for (let index = 0; index < unitMaterialElement.length; index++) {
+        unitMaterialElement[index].addEventListener("blur", function() { validateUnitMaterial(index) });
+        unitMaterialElement[index].addEventListener("input", function() { removeMessageUnitMaterial(index) });
+    }
+}
 
 processGenTableFood();
 
@@ -167,9 +192,68 @@ function validateMaterial() {
     return true;
 }
 
-function messageMaterial(){
+function messageMaterial() {
     messageNameMaterialNullElement.classList.add("d-none");
     messageQuantityMaterialNullElement.classList.add("d-none");
+    messageUnitMaterialNullElement.classList.add("d-none");
+    buttonAddFoodElement.disabled = false;
+}
+
+function validateNameMaterial(index) {
+    if (nameMaterialElement[index].value.trim() == "") {
+        buttonAddFoodElement.disabled = true;
+        messageNotAddMaterialElement.classList.add("d-none");
+        messageQuantityMaterialNullElement.classList.add("d-none");
+        messageUnitMaterialNullElement.classList.add("d-none");
+        messageNameMaterialNullElement.classList.remove("d-none")
+        nameMaterialElement[index].value = null;
+        nameMaterialElement[index].focus();
+        return false;
+    }
+    return true;
+}
+
+function removeMessageNameMaterial(index) {
+    nameMaterialElement[index].value = nameMaterialElement[index].value.replace(regexName, "");
+    messageNameMaterialNullElement.classList.add("d-none");
+    buttonAddFoodElement.disabled = false;
+}
+
+function validateQuantityMaterial(index) {
+    if (quantityMaterialElement[index].value.trim() == "") {
+        buttonAddFoodElement.disabled = true;
+        messageNotAddMaterialElement.classList.add("d-none");
+        messageQuantityMaterialNullElement.classList.remove("d-none");
+        messageUnitMaterialNullElement.classList.add("d-none");
+        messageNameMaterialNullElement.classList.add("d-none")
+        quantityMaterialElement[index].value = null;
+        quantityMaterialElement[index].focus();
+        return false;
+    }
+    return true;
+}
+
+function removeMessageQuantityMaterial(index) {
+    messageQuantityMaterialNullElement.classList.add("d-none");
+    buttonAddFoodElement.disabled = false;
+}
+
+function validateUnitMaterial(index) {
+    if (unitMaterialElement[index].value.trim() == "") {
+        buttonAddFoodElement.disabled = true;
+        messageNotAddMaterialElement.classList.add("d-none");
+        messageQuantityMaterialNullElement.classList.add("d-none");
+        messageUnitMaterialNullElement.classList.remove("d-none");
+        messageNameMaterialNullElement.classList.add("d-none")
+        unitMaterialElement[index].value = null;
+        unitMaterialElement[index].focus();
+        return false;
+    }
+    return true;
+}
+
+function removeMessageUnitMaterial(index) {
+    unitMaterialElement[index].value = unitMaterialElement[index].value.replace(regexName, "");
     messageUnitMaterialNullElement.classList.add("d-none");
     buttonAddFoodElement.disabled = false;
 }
@@ -182,7 +266,7 @@ function addMaterial() {
 
     count = count + 1;
 
-    let divFromMaterial =document.createElement("div");
+    let divFromMaterial = document.createElement("div");
     divFromMaterial.setAttribute("id", "fromMaterial");
     fromMaterialElement.appendChild(divFromMaterial);
 
@@ -218,14 +302,17 @@ function addMaterial() {
     btnX.setAttribute("onclick", "deleteMaterial(fromMaterial" + count + ")");
     btnX.innerText = "x"
     div.appendChild(btnX);
+
+    materialInputAddEventListener();
 }
 
 function deleteMaterial(idFormMaterial) {
-    idFormMaterial.remove();
-    buttonAddFoodElement.disabled = false;
-    messageNameMaterialNullElement.classList.add("d-none");
+    messageNotAddMaterialElement.classList.add("d-none");
     messageQuantityMaterialNullElement.classList.add("d-none");
     messageUnitMaterialNullElement.classList.add("d-none");
+    messageNameMaterialNullElement.classList.add("d-none");
+    idFormMaterial.remove();
+    buttonAddFoodElement.disabled = false;
 }
 
 function deleteAllMaterial() {
